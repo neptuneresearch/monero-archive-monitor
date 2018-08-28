@@ -1,0 +1,85 @@
+<style type="text/css">
+    #banner
+    {
+        text-align: center;
+        margin: 40px 0;
+    }
+
+    #hostbox
+    {
+        width: 317px;
+        margin: 20px auto 0 auto;
+        padding: 30px;
+        color: #CCC;
+
+        background-color: #333;
+        border-radius: 10px;
+    }
+
+    #hostbox *
+    {
+        font-size: 18px;
+    }
+
+    td
+    {
+        padding: 0 10px;
+    }
+
+    input
+    {
+        background-color: #111;
+        width: 225px;
+        color: #FAFAFA;
+        border: 0;
+        border-radius: 5px;
+    }
+
+    #cmdConnect
+    {
+        background-color: #444;
+        color: #FAFAFA;
+
+        font-size: 16px;
+        text-align: center;
+        cursor: pointer;
+
+        height: 40px;
+        line-height: 40px;
+        width: 100%;
+        border: 0;
+        border-radius: 10px;
+
+        margin-top: 20px;
+    }
+</style>
+
+<div id="banner">
+    Monerod Archive Monitor
+</div>
+
+<div id="hostbox">
+    <table>
+        <tr>
+            <td>
+                Host
+            </td>
+            <td>
+                <input id="txt_ip" type="text" value="127.0.0.1" required />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Port
+            </td>
+            <td>
+                <input id="txt_port" type="text" value="20001" required />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" class="noselect">
+                <div id="cmdConnect" class="noselect">Connect</div>
+            </td>
+        </tr>
+    </table>        
+</div>

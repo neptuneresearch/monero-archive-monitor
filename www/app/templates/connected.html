@@ -1,0 +1,53 @@
+<style type="text/css">
+    #hostbox
+    {
+        width: 275px;
+        margin: 20px auto 0 auto;
+        background-color: #000;
+        color: #FAFAFA;
+        border-radius: 10px;
+
+        font-size: 12px;
+        height: 32px;
+        line-height: 16px;
+
+        position: relative;
+    }
+
+    #stat_update
+    {
+        position: absolute;
+        left: 5px;
+        top: 0;
+    }
+
+    #stat_fromnow
+    {
+        position: absolute;
+        left: 5px;
+        bottom: 0;
+
+        color: #BABABA;
+    }
+
+    #cmdPing
+    {
+        position: absolute;
+        right: 0px;
+
+        background-color: #222;
+        color: #FAFAFA;
+        border-radius: 10px;
+        padding: 0 20px;
+        cursor: pointer;
+
+        height: 32px;
+        line-height: 32px;
+    }
+</style>
+
+<div id="hostbox">
+    <span id="stat_update"></span>
+    <span id="stat_fromnow"></span>
+    <div id="cmdPing" class="noselect">ping</div>
+</div>
