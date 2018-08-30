@@ -115,13 +115,13 @@ See ["Archive File" in the monerod-archive README](https://github.com/neptuneres
 
 - [Backbone](http://backbonejs.org/)
 - [Marionette.js](https://marionettejs.com)
+- [RequireJS](https://requirejs.org)
 - [jQuery](https://jquery.com)
+- [Underscore](https://underscorejs.org)
+- [Moment](https://momentjs.com)
+- [Fastclick](https://github.com/ftlabs/fastclick)
 - [D3](https://d3js.org) v5
 - [C3](https://c3js.org) 0.6.7
-- [RequireJS](https://requirejs.org)
-- [Moment](https://momentjs.com)
-- [Underscore](https://underscorejs.org)
-- [Fastclick](https://github.com/ftlabs/fastclick)
 
 
 ---

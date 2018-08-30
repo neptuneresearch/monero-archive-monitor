@@ -1,15 +1,15 @@
 <style type="text/css">
     #hostbox
     {
-        width: 275px;
+        width: 350px;
         margin: 20px auto 0 auto;
-        background-color: #000;
+        background-color: #222;
         color: #FAFAFA;
         border-radius: 10px;
 
         font-size: 12px;
-        height: 32px;
-        line-height: 16px;
+        height: 34px;
+        line-height: 17px;
 
         position: relative;
     }
@@ -30,24 +30,46 @@
         color: #BABABA;
     }
 
-    #cmdPing
+    #cmdPing,#cmdLogout
     {
-        position: absolute;
-        right: 0px;
-
-        background-color: #222;
+        background-color: #333;
         color: #FAFAFA;
+        border: 1px solid rgb(73, 73, 73);
         border-radius: 10px;
         padding: 0 20px;
-        cursor: pointer;
+        cursor: pointer;        
 
         height: 32px;
         line-height: 32px;
     }
+
+    .pong,#cmdLogout:active
+    {
+        background-color: #FAFAFA !important;
+        border: 1px solid #FAFAFA !important;
+        color: #333 !important;
+    }
+
+    #cmdPing
+    {
+        position: absolute;
+        right: 88px;
+    }
+
+    #cmdLogout
+    {
+        position: absolute;
+        right: 0px;
+
+        width: 45px;
+    }
+
+    #cmdPing:hover,#cmdLogout:hover { color: #AAA !important; }
 </style>
 
 <div id="hostbox">
     <span id="stat_update"></span>
     <span id="stat_fromnow"></span>
     <div id="cmdPing" class="noselect">ping</div>
+    <div id="cmdLogout" class="noselect">logout</div>
 </div>

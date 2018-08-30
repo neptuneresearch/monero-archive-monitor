@@ -5,20 +5,30 @@
         margin: 40px 0;
     }
 
-    #hostbox
+    #hostbox,#loadbox
     {
         width: 317px;
         margin: 20px auto 0 auto;
         padding: 30px;
         color: #CCC;
 
-        background-color: #333;
+        background-color: #222;
         border-radius: 10px;
     }
 
     #hostbox *
     {
         font-size: 18px;
+    }
+
+    #loadbox table
+    {
+        width: 100%;
+    }
+
+    #loadbox td
+    {
+        text-align: center;
     }
 
     td
@@ -35,9 +45,9 @@
         border-radius: 5px;
     }
 
-    #cmdConnect
+    #cmdConnect, #cmdCancel
     {
-        background-color: #444;
+        background-color: #333;
         color: #FAFAFA;
 
         font-size: 16px;
@@ -47,15 +57,26 @@
         height: 40px;
         line-height: 40px;
         width: 100%;
-        border: 0;
+        border: 1px solid rgb(73, 73, 73);
         border-radius: 10px;
 
         margin-top: 20px;
     }
+
+    #cmdConnect:active, #cmdCancel:active
+    {
+        background-color: #FAFAFA !important;
+        border: 1px solid #FAFAFA !important;
+        color: #333 !important;
+    }    
+
+    #loadhost { color: #FAFAFA; }
+
+    #cmdConnect:hover { color: #AAA !important; }
 </style>
 
 <div id="banner">
-    Monerod Archive Monitor
+    Monero Archive Monitor
 </div>
 
 <div id="hostbox">
@@ -65,7 +86,7 @@
                 Host
             </td>
             <td>
-                <input id="txt_ip" type="text" value="127.0.0.1" required />
+                <input id="txt_ip" type="text" value="" required />
             </td>
         </tr>
         <tr>
@@ -82,4 +103,24 @@
             </td>
         </tr>
     </table>        
+</div>
+
+<div id="loadbox" style="display:none">
+    <table>
+        <tr>
+            <td colspan="2">
+                Connecting
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <span id="loadhost"><%= window.location.hostname %></span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" class="noselect">
+                <div id="cmdCancel" class="noselect">Cancel</div>
+            </td>
+        </tr>
+    </table>  
 </div>

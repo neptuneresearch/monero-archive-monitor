@@ -55,7 +55,8 @@ define([
 
         onDomRefresh: function()
         {
-            
+            // Autoconnect on Screen Load
+            DataChannel.request('connect');
         },
 
         onBeforeDetach: function()

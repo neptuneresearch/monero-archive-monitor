@@ -104,18 +104,11 @@ var monitor_server =
     onPing: function()
     {
         // Log ping
-        log.info(this.__id_log_string + "\t" + 'ping received');
+        log.info(this.__id_log_string + "\t" + 'ping');
 
-        // Send data
-        var MOCKUP_ENABLE = true;
-        if(MOCKUP_ENABLE)
-        {
-            // Mock new data
-            monitor_server.DATA_CACHE = mock_output.create(null);
-        }
-        
-        // Resend
-        monitor_server.data_update(this);
+        // Send pong
+        log.info(this.__id_log_string + "\t" + 'pong');
+        this.send('pong');
     },
 
     data_update: function(spark)

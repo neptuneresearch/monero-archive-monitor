@@ -21,12 +21,14 @@ define([
             'host_ip': '#host_ip',
             'stat_update': '#stat_update',
             'stat_fromnow': '#stat_fromnow',
-            'cmdPing': '#cmdPing'
+            'cmdPing': '#cmdPing',
+            'cmdLogout': '#cmdLogout'
         },
 
         events:
         {
-            'click @ui.cmdPing': 'cmdPing'
+            'click @ui.cmdPing': 'cmdPing',
+            'click @ui.cmdLogout': 'cmdLogout'
         },
 
         __UPDATED: null,
@@ -34,11 +36,13 @@ define([
         initialize: function()
         {
             DataChannel.on('data_update', this.data_onUpdate, this);
+            DataChannel.on('data_pong', this.data_onPong, this);
         },
 
         destroy: function()
         {
             DataChannel.off('data_update', this.data_onUpdate, this);
+            DataChannel.off('data_pong', this.data_onPong, this);
 
             return Marionette.View.prototype.destroy.apply(this, arguments);
         },
@@ -61,9 +65,22 @@ define([
             this.getUI('stat_update').html(now);
         },
 
+        data_onPong: function()
+        {
+            this.getUI('cmdPing').addClass('pong').html('pong').prop('disabled', true);
+
+            var view = this;
+            setTimeout(function() { view.getUI('cmdPing').removeClass('pong').html('ping').prop('disabled', false) }, 1000);
+        },
+
         cmdPing: function()
         {
             DataChannel.request('ping');
+        },
+
+        cmdLogout: function()
+        {
+            DataChannel.request('disconnect');
         }
     });
 

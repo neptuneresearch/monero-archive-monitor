@@ -11,17 +11,35 @@ define([
 
         // CONFIGURATION
         // *************
-        host: '127.0.0.1',
+        host: '',
         port: '20001',
 
         // STATE
         // *************
         primus: null,
 
-        connect: function(ASK_HOST)
+        initialize: function()
         {
-            if(typeof(ASK_HOST) === 'undefined') ASK_HOST = this.host;
-            this.host = ASK_HOST;
+            // Default host to origin
+            this.host = window.location.hostname;
+
+            // Bind events; ClientLib never destructs
+            DataChannel.reply('connect', this.connect, this);
+            DataChannel.reply('disconnect', this.disconnect, this);
+            DataChannel.reply('host', this.host, this);
+        },
+
+        connect: function(options)
+        {
+            // Switch Connect UI
+            DataChannel.trigger('connecting');
+
+            // { host_ip, host_port }
+            if(typeof(options) !== 'undefined') 
+            {
+                this.host = options.host_ip;
+                this.port = options.host_port;
+            }
 
             // Connect now
             this.primus = Primus.connect('http://' + this.host + ':' + this.port);
@@ -29,17 +47,55 @@ define([
             // Server events
             this.primus.on('open', this.onOpen, this);
             this.primus.on('close', this.onClose, this);
+            this.primus.on('reconnect', this.onReconnect, this);
+            this.primus.on('reconnect scheduled', this.onReconnectScheduled, this);
+            this.primus.on('error', this.onError, this);
+            this.primus.on('reconnected', this.onReconnected, this);
 
             // Ui events
             DataChannel.reply('ping', this.ping, this);
         },
 
+        disconnect: function()
+        {
+            this.primus.end();
+
+            this.primus = null;
+        },
+
+        onReconnect: function()
+        {
+            console.log('Data Service: reconnecting ...');
+        },
+
+        onReconnectScheduled: function()
+        {
+            console.log('Data Service: reconnect scheduled');
+        },
+
+        onReconnected: function()
+        {
+            console.log('Data Service: reconnected');
+        },
+
+        onError: function(error)
+        {
+            console.log('Data Service: error: ' + error);
+        },
+
+        host: function()
+        {
+            return this.host;
+        },
+
         onOpen: function()
         {
             DataChannel.trigger('connected');
+            console.log('Data Service: connected');
             
             // Connection events
             this.primus.on('data_update', this.onDataUpdate, this);
+            this.primus.on('pong', this.onPong, this);
         },
 
         onDataUpdate: function(data) 
@@ -50,9 +106,16 @@ define([
             DataChannel.trigger('data_update', data);
         },
 
+        onPong: function()
+        {
+            // Emit pong
+            DataChannel.trigger('data_pong');
+        },
+
         onClose: function()
         {
             DataChannel.trigger('disconnected');
+            console.log('Data Service: disconnected');
 
             // Unbind
             this.primus.off('open', this.onOpen, this);

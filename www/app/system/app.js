@@ -26,7 +26,7 @@ define([
 
         initialize: function (options)
         {
-            
+            ClientLib.initialize();
         },
 
         onStart: function (app, options) 
