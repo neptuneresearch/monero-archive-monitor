@@ -21,7 +21,9 @@ define([
             'loadbox': '#loadbox',
             'txt_ip': '#txt_ip',
             'txt_port': '#txt_port',
-            'cmdConnect': '#cmdConnect'
+            'cmdConnect': '#cmdConnect',
+            'cmdCancel': '#cmdCancel',
+            'connecting_host': '#connecting_host'
         },
 
         events:
@@ -44,8 +46,9 @@ define([
 
         onDomRefresh: function()
         {
-            // Default host
-            this.getUI('txt_ip').val(DataChannel.request('host'));
+            // Connect box init
+            var host = DataChannel.request('host');
+            this.getUI('txt_ip').val(host);
         },
 
         cmdConnect: function()
@@ -70,14 +73,19 @@ define([
             DataChannel.request('connect', { host_ip: host_ip, host_port: host_port });
         },
 
-        data_onConnecting: function()
+        data_onConnecting: function(connecting_host)
         {
+            // Connecting box init
+            this.getUI('connecting_host').html(connecting_host);
+
+            // Switch connect -> connecting
             this.getUI('hostbox').hide();
             this.getUI('loadbox').show();
         },
 
         cmdCancel: function()
         {
+            // Switch connecting -> connect
             this.getUI('loadbox').hide();
             this.getUI('hostbox').show();
         }

@@ -1,8 +1,9 @@
 define([
     'underscore',
     'backbone.radio',
+    'moment'
 
-], function (_, Radio) {
+], function (_, Radio, moment) {
     'use strict';
 
     var DataChannel = Radio.channel('data');
@@ -17,6 +18,7 @@ define([
         // STATE
         // *************
         primus: null,
+        pingTimeLast: null,
 
         initialize: function()
         {
@@ -31,15 +33,15 @@ define([
 
         connect: function(options)
         {
-            // Switch Connect UI
-            DataChannel.trigger('connecting');
-
             // { host_ip, host_port }
             if(typeof(options) !== 'undefined') 
             {
                 this.host = options.host_ip;
                 this.port = options.host_port;
             }
+
+            // Switch Connect UI
+            DataChannel.trigger('connecting', this.host);
 
             // Connect now
             this.primus = Primus.connect('http://' + this.host + ':' + this.port);
@@ -65,17 +67,17 @@ define([
 
         onReconnect: function()
         {
-            console.log('Data Service: reconnecting ...');
+            DataChannel.trigger('log', 'reconnecting ...');
         },
 
         onReconnectScheduled: function()
         {
-            console.log('Data Service: reconnect scheduled');
+            DataChannel.trigger('log', 'reconnect scheduled');
         },
 
         onReconnected: function()
         {
-            console.log('Data Service: reconnected');
+            DataChannel.trigger('log', 'reconnected');
         },
 
         onError: function(error)
@@ -90,8 +92,7 @@ define([
 
         onOpen: function()
         {
-            DataChannel.trigger('connected');
-            console.log('Data Service: connected');
+            DataChannel.trigger('log', 'connected');
             
             // Connection events
             this.primus.on('data_update', this.onDataUpdate, this);
@@ -108,14 +109,16 @@ define([
 
         onPong: function()
         {
+            // Measure time elapsed since ping
+            var pingTime = moment().diff(this.pingTimeLast);
+
             // Emit pong
-            DataChannel.trigger('data_pong');
+            DataChannel.trigger('data_pong', pingTime);
         },
 
         onClose: function()
         {
-            DataChannel.trigger('disconnected');
-            console.log('Data Service: disconnected');
+            DataChannel.trigger('log', 'disconnected');
 
             // Unbind
             this.primus.off('open', this.onOpen, this);
@@ -133,6 +136,10 @@ define([
 
         ping: function()
         {
+            // Record time
+            this.pingTimeLast = moment();
+
+            // Send ping
             ClientLib.send('ping', '');
         }
     };

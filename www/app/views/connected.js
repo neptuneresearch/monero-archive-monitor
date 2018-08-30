@@ -19,8 +19,8 @@ define([
         ui:
         {
             'host_ip': '#host_ip',
-            'stat_update': '#stat_update',
-            'stat_fromnow': '#stat_fromnow',
+            'data_update_time': '#data_update_time',
+            'data_update_time_avg': '#data_update_time_avg',
             'cmdPing': '#cmdPing',
             'cmdLogout': '#cmdLogout'
         },
@@ -31,7 +31,9 @@ define([
             'click @ui.cmdLogout': 'cmdLogout'
         },
 
-        __UPDATED: null,
+        data_update_time_last: 0,
+        data_update_time_avg: 0,
+        date_update_time_avg_n: 0,
 
         initialize: function()
         {
@@ -54,21 +56,31 @@ define([
 
         data_onUpdate: function()
         {
-            // Time since last update
-            var UPDATED0 = (this.__UPDATED !== null ? this.__UPDATED : moment());
-            var fromNow = moment(UPDATED0).fromNow();
-            this.getUI('stat_fromnow').html(fromNow);
+            // Data update time
+            var now = moment();
+            if(this.data_update_time_last === 0) this.data_update_time_last = now;
+            var data_update_time = moment(now).diff(this.data_update_time_last);
+            this.data_update_time_last = now;
 
-            // Time now
-            this.__UPDATED = moment();
-            var now = moment(this.__UPDATED).format();
-            this.getUI('stat_update').html(now);
+            // Data update time average
+            //  Formula: new_average = (old_average * (n-1) + new_value) / n
+            this.date_update_time_avg_n++;
+            this.data_update_time_avg = Math.ceil((this.data_update_time_avg * (this.date_update_time_avg_n-1) + data_update_time) / this.date_update_time_avg_n);
+            this.getUI('data_update_time_avg').html('T&#x0304; ' + this.data_update_time_avg + ' ms');
+
+            // Data update time
+            var data_update_time_last_format = moment(this.data_update_time_last).format();
+            this.getUI('data_update_time').html(data_update_time_last_format);
         },
 
-        data_onPong: function()
+        data_onPong: function(pingTime)
         {
-            this.getUI('cmdPing').addClass('pong').html('pong').prop('disabled', true);
+            // pong button
+            var pongText = pingTime + ' ms';
+            DataChannel.trigger('log', 'ping ' + pongText);
+            this.getUI('cmdPing').addClass('pong').html(pongText).prop('disabled', true);
 
+            // Restore ping button in 1s
             var view = this;
             setTimeout(function() { view.getUI('cmdPing').removeClass('pong').html('ping').prop('disabled', false) }, 1000);
         },

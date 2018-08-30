@@ -26,6 +26,7 @@ define([
 
         ui:
         {
+            'data_log': '#data_log'
         },
 
         events:
@@ -35,8 +36,7 @@ define([
 
         initialize: function()
         {
-            DataChannel.on('connected', this.data_onConnected, this);
-            DataChannel.on('disconnected', this.data_onDisconnected, this);
+            DataChannel.on('log', this.data_onLog, this);
         },
 
         destroy: function()
@@ -49,8 +49,8 @@ define([
 
         onRender: function()
         {
-            // Offer Connect
-            this.data_onDisconnected();
+            // Offer Connect via simulated disconnect
+            this.screen_switch(false);
         },
 
         onDomRefresh: function()
@@ -64,16 +64,30 @@ define([
             // $ UNBIND
         },
 
-        data_onConnected: function()
+        screen_switch: function(isConnected)
         {
-            this.getRegion('connect').empty().show(new ConnectedView());
-            this.getRegion('graph_blockchains').show(new GraphBlockchainsView());
+            if(isConnected)
+            {
+                this.getRegion('connect').empty().show(new ConnectedView());
+                this.getRegion('graph_blockchains').show(new GraphBlockchainsView());
+            }
+            else
+            {
+                this.getRegion('graph_blockchains').empty();
+                this.getRegion('connect').show(new ConnectView());
+            }
         },
 
-        data_onDisconnected: function()
+        data_onLog: function(log)
         {
-            this.getRegion('graph_blockchains').empty();
-            this.getRegion('connect').show(new ConnectView());
+            // Show log message
+            this.getUI('data_log').html(log).fadeIn().delay(1000).fadeOut();
+
+            // Switch Screen on connected/disconnected
+            if(log === 'connected') 
+                this.screen_switch(true);
+            else if(log === 'disconnected') 
+                this.screen_switch(false);
         }
     });
 

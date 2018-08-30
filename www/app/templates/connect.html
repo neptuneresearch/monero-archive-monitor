@@ -2,7 +2,7 @@
     #banner
     {
         text-align: center;
-        margin: 40px 0;
+        margin: 20px 0 60px 0;
     }
 
     #hostbox,#loadbox
@@ -14,6 +14,12 @@
 
         background-color: #222;
         border-radius: 10px;
+    }
+
+    #loadbox
+    {
+        width: auto !important;
+        max-width: 50%;
     }
 
     #hostbox *
@@ -63,6 +69,12 @@
         margin-top: 20px;
     }
 
+    #cmdCancel
+    {
+        max-width: 317px;
+        margin: 20px auto 0 auto;
+    }
+
     #cmdConnect:active, #cmdCancel:active
     {
         background-color: #FAFAFA !important;
@@ -70,7 +82,7 @@
         color: #333 !important;
     }    
 
-    #loadhost { color: #FAFAFA; }
+    #connecting_host { color: #FAFAFA; }
 
     #cmdConnect:hover { color: #AAA !important; }
 </style>
@@ -114,7 +126,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <span id="loadhost"><%= window.location.hostname %></span>
+                <span id="connecting_host"></span>
             </td>
         </tr>
         <tr>

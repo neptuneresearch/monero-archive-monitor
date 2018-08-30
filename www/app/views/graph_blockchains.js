@@ -56,13 +56,15 @@ define([
 
         data_onUpdate: function(data)
         {
-            var DEBUG = false;
-
             // Split data
             var outputs = data.split("\t");
             var alt_chains_info_json = outputs[4];
-            if(DEBUG) this.getUI('json').html(alt_chains_info_json);
             var alt_chains_info = JSON.parse(alt_chains_info_json);
+
+            // Show Is Alt Block? field
+            var is_alt_block = outputs[1];
+            var deltaRT = this.deltaRT(outputs[0], outputs[2]);
+            DataChannel.trigger('log', 'Incoming ' + (is_alt_block === '1' ? 'ALT' : 'MAIN') + ' block, &#x25B3;RT=' + deltaRT + 's');
 
             // Assert chains
             if(alt_chains_info.length > 0)
@@ -120,6 +122,33 @@ define([
                 $('#chart').empty().html('no alternate chains');
             }
 
+        },
+
+        deltaRT: function(strNRT,strBlockJson)
+        {
+            // Don't crash on errors
+            try
+            {
+                // NRT
+                var intNRT = parseInt(strNRT, 10);
+                if(isNaN(intNRT)) throw null;
+
+                // scale NRT to MRT second resolution
+                var intNRT_as_seconds = Math.ceil(intNRT / 1000);
+
+                // MRT
+                var block = JSON.parse(strBlockJson);
+                if(typeof(block) !== 'object') throw null;
+                var MRT = block.timestamp;
+                
+                // /_\
+                var deltaRT = intNRT_as_seconds - MRT;
+                return deltaRT;
+            }
+            catch(ex)
+            {
+                return '?';
+            }
         }
     });
 
