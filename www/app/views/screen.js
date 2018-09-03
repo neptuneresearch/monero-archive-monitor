@@ -184,13 +184,6 @@ define([
             // Set Monitor entry
             archive_entry.monitor_entry.delta_rt = this.deltaRT(archive_entry.nrt, archive_entry.block.timestamp);
 
-            // Mock 
-            archive_entry.alt_chains_info = [];
-            for(var i = 0; i < 12; i++)
-            {
-                archive_entry.alt_chains_info.push({"length":i,"height":2,"deep":2,"diff":0,"hash":"ba8bc38ba847a63b71ab8b8af7eba7ba87be87afa7bef7828ab288cb28a742" + i});
-            }
-
             // Log Incoming Block
             DataChannel.trigger('log', 'Incoming ' + (archive_entry.is_alt_block === '1' ? 'ALT' : 'MAIN') + ' block, &#x25B3;RT=' + archive_entry.monitor_entry.delta_rt + 's');
 
