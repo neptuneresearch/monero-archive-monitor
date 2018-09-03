@@ -5,9 +5,11 @@ Web application for monitoring and visualizing output from [monerod-archive](htt
 - [x] :bar_chart: Alt Chains, a graph of the monerod-archive daemon's internal state of alternate blockchains
   
 monero-archive-monitor tails [monerod-archive's output file](https://github.com/neptuneresearch/monerod-archive#archive-file) and continuously sends the output data over a web socket to a web browser which renders visualizations.
-  
-  ![Monero Archive Monitor](docs/design.png)
 
+**Design**    
+  ![Monero Archive Monitor](docs/design.png)
+  
+**Screenshot**  
   ![Monero Archive Monitor Screenshot](docs/screenshot_build12.png)
   
 > monero-archive-monitor is copyright (c) 2018 Neptune Research.  
