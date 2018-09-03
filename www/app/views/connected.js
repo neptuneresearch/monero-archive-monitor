@@ -51,7 +51,8 @@ define([
 
         onDomRefresh: function()
         {
-
+            // Fade in
+            AppChannel.request('screen_animate', { origin: 'connected', el: this.el });
         },
 
         data_onUpdate: function()

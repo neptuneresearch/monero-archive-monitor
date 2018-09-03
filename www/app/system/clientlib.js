@@ -14,6 +14,7 @@ define([
         // *************
         host: '',
         port: '20001',
+        test_disable_connecting: false,
 
         // STATE
         // *************
@@ -42,6 +43,9 @@ define([
 
             // Switch Connect UI
             DataChannel.trigger('connecting', this.host);
+
+            // test_disable_connecting
+            if(this.test_disable_connecting) return;
 
             // Connect now
             this.primus = Primus.connect('http://' + this.host + ':' + this.port);

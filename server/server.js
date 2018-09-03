@@ -111,7 +111,7 @@ var monitor_server =
         this.send('pong');
     },
 
-    data_update: function(spark)
+    data_update: function()
     {
         // Assert data
         if(monitor_server.DATA_CACHE === null) return;
@@ -119,24 +119,12 @@ var monitor_server =
         // Trace data
         log.trace('[data]' + "\t" + monitor_server.DATA_CACHE);
 
-        // Check origin
-        var origin;
-        if(typeof(spark) === 'undefined')
-        {
-            // Tail Service: forward to all sockets
-            origin = 'Tail';
-            monitor_server.primus.room(monitor_server.__room_display).send('data_update', monitor_server.DATA_CACHE);
-        }
-        else
-        {
-            // Ping reply: resend to one socket
-            origin = spark.__id_log_string;
-            spark.send('data_update', monitor_server.DATA_CACHE);
-        }
+        // Send data to display room
+        monitor_server.primus.room(monitor_server.__room_display).send('data_update', monitor_server.DATA_CACHE);
 
         // Log update
         var data_size = sizeof(monitor_server.DATA_CACHE);
-        log.info(origin + "\t" + 'data update' + "\t" + '$' + data_size);
+        log.info('Tail data update' + "\t" + '$' + data_size);
     },
 
     onTailReceiveData: function(data)

@@ -46,6 +46,9 @@ define([
 
         onDomRefresh: function()
         {
+            // Fade in
+            AppChannel.request('screen_animate', { origin: 'connect_render', el: this.el });
+
             // Connect box init
             var host = DataChannel.request('host');
             this.getUI('txt_ip').val(host);
@@ -80,14 +83,14 @@ define([
 
             // Switch connect -> connecting
             this.getUI('hostbox').hide();
-            this.getUI('loadbox').show();
+            AppChannel.request('screen_animate', { origin: 'connecting', el: this.getUI('loadbox') });
         },
 
         cmdCancel: function()
         {
             // Switch connecting -> connect
             this.getUI('loadbox').hide();
-            this.getUI('hostbox').show();
+            AppChannel.request('screen_animate', { origin: 'connect_cancel', el: this.getUI('hostbox') });
         }
     });
 

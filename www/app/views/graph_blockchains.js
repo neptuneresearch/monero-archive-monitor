@@ -34,12 +34,12 @@ define([
 
         initialize: function(options)
         {
-            DataChannel.on('data_update', this.data_onUpdate, this);
+            DataChannel.on('data_updateparsed', this.data_onUpdateParsed, this);
         },
 
         destroy: function()
         {
-            DataChannel.off('data_update', this.data_onUpdate, this);
+            DataChannel.off('data_updateparsed', this.data_onUpdateParsed, this);
 
             return Marionette.View.prototype.destroy.apply(this, arguments);
         },
@@ -47,6 +47,8 @@ define([
         onDomRefresh: function()
         {
             // $ Init
+            // Start hidden
+            $(this.el).hide();
         },
 
         onBeforeDetach: function()
@@ -54,29 +56,21 @@ define([
             // $ Destroy
         },
 
-        data_onUpdate: function(data)
+        data_onUpdateParsed: function(archive)
         {
-            // Split data
-            var outputs = data.split("\t");
-            var alt_chains_info_json = outputs[4];
-            var alt_chains_info = JSON.parse(alt_chains_info_json);
-
-            // Show Is Alt Block? field
-            var is_alt_block = outputs[1];
-            var deltaRT = this.deltaRT(outputs[0], outputs[2]);
-            DataChannel.trigger('log', 'Incoming ' + (is_alt_block === '1' ? 'ALT' : 'MAIN') + ' block, &#x25B3;RT=' + deltaRT + 's');
+            var show = (this.chart === null);
 
             // Assert chains
-            if(alt_chains_info.length > 0)
+            if(archive.alt_chains_info.length > 0)
             {
                 // Alt Chains Exist
                 this.DATA_COLUMNS = [];
-                for(var i = 0; i < alt_chains_info.length; i++)
+                for(var i = 0; i < archive.alt_chains_info.length; i++)
                 {
                     this.DATA_COLUMNS.push(
                         [
-                            alt_chains_info[i].hash, 
-                            alt_chains_info[i].length
+                            archive.alt_chains_info[i].hash, 
+                            archive.alt_chains_info[i].length
                         ]
                     );
                 }
@@ -110,6 +104,14 @@ define([
                                 {
                                     label: 'length'
                                 }
+                            },
+                            size:
+                            {
+                                width: 640,
+                                height: 480
+                            },
+                            legend: { 
+                                show: false
                             }
                         }
                     );
@@ -122,33 +124,8 @@ define([
                 $('#chart').empty().html('no alternate chains');
             }
 
-        },
-
-        deltaRT: function(strNRT,strBlockJson)
-        {
-            // Don't crash on errors
-            try
-            {
-                // NRT
-                var intNRT = parseInt(strNRT, 10);
-                if(isNaN(intNRT)) throw null;
-
-                // scale NRT to MRT second resolution
-                var intNRT_as_seconds = Math.ceil(intNRT / 1000);
-
-                // MRT
-                var block = JSON.parse(strBlockJson);
-                if(typeof(block) !== 'object') throw null;
-                var MRT = block.timestamp;
-                
-                // /_\
-                var deltaRT = intNRT_as_seconds - MRT;
-                return deltaRT;
-            }
-            catch(ex)
-            {
-                return '?';
-            }
+            // Fade in
+            if(show) AppChannel.request('screen_animate', { origin: 'graph_blockchains', el: this.el });
         }
     });
 

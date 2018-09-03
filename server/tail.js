@@ -52,6 +52,7 @@ var monitor_tail =
     {
         // Log error
         log.fatal('Tail error: ' + error);
+        log.warning('Tail Service reported a fatal error. It may not be operating correctly now. The server may need to be restarted to recover the Tail Service.');
     },
 
     tail_read: function()
@@ -67,14 +68,14 @@ var monitor_tail =
         rl.on('line', 
             function(line) 
             {
-                if (line.length >= 1) tail = line;
+                if(line.length >= 1) tail = line;
             }
         );
 
         rl.on('error', function(err)
             {
                 // TODO - what data type is err?
-                log.fatal('tail_read: ' + err.toString());
+                log.fatal('Tail acquire error: ' + err.toString());
             }
         );
 

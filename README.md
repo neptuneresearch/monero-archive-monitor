@@ -7,6 +7,8 @@ Web application for monitoring and visualizing output from [monerod-archive](htt
 monero-archive-monitor tails [monerod-archive's output file](https://github.com/neptuneresearch/monerod-archive#archive-file) and continuously sends the output data over a web socket to a web browser which renders visualizations.
   
   ![Monero Archive Monitor](docs/design.png)
+
+  ![Monero Archive Monitor Screenshot](docs/screenshot_build12.png)
   
 > monero-archive-monitor is copyright (c) 2018 Neptune Research.  
 monero-archive-monitor is offered under the BSD-2-Clause open source license. See [LICENSE](LICENSE) for more information.  
